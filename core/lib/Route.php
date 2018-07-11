@@ -25,6 +25,7 @@ class Route
             if (in_array($this->option[0], $this->config['MODULES'])) {
                 self::$module = strtolower($this->option[0]);
                 array_shift($this->option);
+                return;
             }
         }
         self::$module = $this->config['DEFAULT_MODULE'];
@@ -60,14 +61,12 @@ class Route
 
     private function getOption()
     {
-        $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
-
+        $uri = isset($_SERVER['REQUEST_URI']) ? trim($_SERVER['REQUEST_URI'], '/') : '';
         if (empty($uri))
             return;
 
-        $uri = ltrim(rtrim($uri, '?index.php'), '/');
+        $uri = preg_replace(array('/\/$/', '/^\?index.php/'), array('', ''), $uri);
 
-        $option = array();
         if ($uri) {
             $this->option = explode('/', $uri);
         }

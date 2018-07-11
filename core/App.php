@@ -12,6 +12,9 @@ class App
      */
     public static function run()
     {
+        //初始化日志
+        \core\lib\Log::init();
+
         //加载路由类
         $route = new Route();
 
